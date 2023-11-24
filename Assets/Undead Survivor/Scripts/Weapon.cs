@@ -13,14 +13,9 @@ public class Weapon : MonoBehaviour
 
     private void Awake()
     {
-        player = GetComponentInParent<Player>();
+        player = GameManager.Instance.player;
     }
 
-
-    private void Start()
-    {
-        Init();
-    }
     // Update is called once per frame
     void Update()
     {
@@ -52,10 +47,30 @@ public class Weapon : MonoBehaviour
         this.count += count;
 
         if (id == 0) Batch();
+
+        // Damage 증가 Gear 효과 적용을 위해
+        player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
 
-    public void Init()
+    public void Init(ItemData data)
     {
+        name = "Weapon " + data.itemId;
+        transform.parent = player.transform;
+        transform.localPosition = Vector3.zero;
+
+        id = data.itemId;
+        damage = data.baseDamage;
+        count = data.baseCount;
+
+        for (int i = 0; i < GameManager.Instance.pool.prefabs.Length; i++)
+        {
+            if (data.projectile == GameManager.Instance.pool.prefabs[i])
+            {
+                prefabId = i;
+                break;
+            }
+        }
+
         switch (id)
         {
             case 0:
@@ -67,6 +82,12 @@ public class Weapon : MonoBehaviour
                 Fire();
                 break;
         }
+
+        Hand hand = player.hands[(int)data.itemType];
+        hand.spriter.sprite = data.hand;
+        hand.gameObject.SetActive(true);
+
+        player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
 
     void Batch()
