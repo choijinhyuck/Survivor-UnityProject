@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(!GameManager.Instance.isLive) return;
+        if (!GameManager.Instance.isLive) return;
 
         if (!isLive || anim.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
             return;
@@ -77,6 +77,7 @@ public class Enemy : MonoBehaviour
         if (health > 0)
         {
             anim.SetTrigger("Hit");
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.Hit);
         }
         else
         {
@@ -87,6 +88,12 @@ public class Enemy : MonoBehaviour
             anim.SetBool("Dead", true);
             GameManager.Instance.kill++;
             GameManager.Instance.GetExp();
+
+            if (GameManager.Instance.isLive)
+            {
+                AudioManager.instance.PlaySfx(AudioManager.Sfx.Dead);
+
+            }
         }
     }
 
