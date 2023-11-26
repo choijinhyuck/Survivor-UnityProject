@@ -19,6 +19,8 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GameManager.Instance.isLive) return;
+
         switch (id)
         {
             case 0:
@@ -27,7 +29,7 @@ public class Weapon : MonoBehaviour
             default:
                 timer += Time.deltaTime;
 
-                if(timer > speed)
+                if (timer > speed)
                 {
                     timer = 0f;
                     Fire();
@@ -35,10 +37,6 @@ public class Weapon : MonoBehaviour
                 break;
         }
 
-        if (Input.GetButtonDown("Jump"))
-        {
-            LevelUp(10, 1);
-        }
     }
 
     public void LevelUp(float damage, int count)
