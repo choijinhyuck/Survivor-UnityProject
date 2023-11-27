@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public Scanner scanner;
     public Hand[] hands;
     public RuntimeAnimatorController[] animCon;
+    public Joy joy;
 
     Rigidbody2D rigid;
     Animator anim;
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
     {
         if (!GameManager.Instance.isLive) return;
 
+        inputVector = new Vector2(joy.nextDir.x, joy.nextDir.y);
         Vector2 nextVec = inputVector * speed * Time.fixedDeltaTime;
         rigid.MovePosition(rigid.position + nextVec);
     }
